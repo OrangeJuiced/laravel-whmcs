@@ -3,7 +3,7 @@
 namespace WHMCS;
 
 class WHMCS extends WhmcsCore {
-    
+
     /**
      * Instantiate a new instance
      *
@@ -16,7 +16,7 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Return a list of all clients
-     * 
+     *
      * @param int $start
      * @param int $limit
      * @return array
@@ -31,13 +31,13 @@ class WHMCS extends WhmcsCore {
 
         if($search)
             $data['search'] = $search;
-        
+
         return $this->submitRequest($data);
     }
 
     /**
      * Returns the specified client's data
-     * 
+     *
      * @param string|int $client_id
      * @param bool $stats
      * @return array
@@ -55,7 +55,7 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Returns the specified client's domainss
-     * 
+     *
      * @param string|int $clientId
      * @return array
      */
@@ -73,7 +73,7 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Return a list of a client's products
-     * 
+     *
      * @param int $client_id
      * @param int $start
      * @param int $limit
@@ -93,13 +93,31 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Creates a new client
-     * 
+     *
      * @param array $data
      * @return array
      */
     public function createClient($data)
     {
         $data['action'] = 'addclient';
+
+        return $this->submitRequest($data);
+    }
+
+
+    /**
+     * Returns a list of tickets.
+     *
+     * @param array $data
+     * @return array
+     */
+    public function getTickets($data)
+    {
+        $data = [
+            'action'        =>  'GetTickets',
+            'clientid'      =>  $client_id,
+            'status'    =>  $status
+        ];
 
         return $this->submitRequest($data);
     }
