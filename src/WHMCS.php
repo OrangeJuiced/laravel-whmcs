@@ -111,12 +111,12 @@ class WHMCS extends WhmcsCore {
      * @param array $data
      * @return array
      */
-    public function getTickets($data)
+    public function getTickets($client_id, $status)
     {
         $data = [
             'action'        =>  'GetTickets',
             'clientid'      =>  $client_id,
-            'status'    =>  $status
+            'status'        =>  $status
         ];
 
         return $this->submitRequest($data);
