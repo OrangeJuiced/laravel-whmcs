@@ -24,7 +24,7 @@ class WHMCS extends WhmcsCore {
     public function getClients($start = 0, $limit = 25, $search = null)
     {
         $data = [
-            'action'        => 'getclients',
+            'action'        => 'GetClients',
             'limitstart'    => $start,
             'limitnum'      => $limit,
         ];
@@ -45,7 +45,7 @@ class WHMCS extends WhmcsCore {
     public function getClientDetails($client_id, $stats = false)
     {
         $data = [
-            'action'    =>  'getclientsdetails',
+            'action'    =>  'GetClientsDetails',
             'clientid'  =>  $client_id,
             'stats'     =>  $stats
         ];
@@ -62,7 +62,7 @@ class WHMCS extends WhmcsCore {
     public function getClientDomains($client_id, $start = 0, $limit = 25)
     {
         $data = [
-            'action'        =>  'getclientsdomains',
+            'action'        =>  'GetClientsDomains',
             'clientid'      =>  $client_id,
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
@@ -82,8 +82,8 @@ class WHMCS extends WhmcsCore {
     public function getClientProducts($client_id, $start = 0, $limit = 25)
     {
         $data = [
-            'action'        => 'getclientsproducts',
-            'clientid'      => $client_id,
+            'action'        =>  'GetClientsProducts',
+            'clientid'      =>  $client_id,
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
