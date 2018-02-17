@@ -108,15 +108,71 @@ class WHMCS extends WhmcsCore {
     /**
      * Returns a list of tickets.
      *
-     * @param array $data
+     * @param int $client_id
+     * @param string $status
+     * @param int $department_id
      * @return array
      */
-    public function getTickets($client_id, $status)
+    public function getTickets($client_id, $status, $department_id)
     {
         $data = [
             'action'        =>  'GetTickets',
+            'clientid'      =>  $client_id
+        ];
+
+        if ($status) {
+            $data['status'] = $status;
+        }
+
+        if ($department_id) {
+            $data['deptid'] = $department_id;
+        }
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Creates a new ticket.
+     *
+     * @param int $client_id
+     * @param int $department_id
+     * @param string $subject
+     * @param string $message
+     * @param boolean $markdown
+     * @return array
+     */
+    public function openTicket($client_id, $department_id, $subject, $message, $markdown = true)
+    {
+        $data = [
+            'action'        =>  'OpenTicket',
             'clientid'      =>  $client_id,
-            'status'        =>  $status
+            'deptid'        =>  $department_id,
+            'subject'       =>  $subject,
+            'message'       =>  $message,
+            'markdown'      =>  $markdown
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Creates a new ticket.
+     *
+     * @param int $client_id
+     * @param int $department_id
+     * @param string $subject
+     * @param string $message
+     * @param boolean $markdown
+     * @return array
+     */
+    public function AddTicketReply($client_id, $ticket_id, $message, $markdown = true)
+    {
+        $data = [
+            'action'        =>  'AddTicketReply',
+            'userid'        =>  $client_id,
+            'ticketid'      =>  $ticket_id,
+            'message'       =>  $message,
+            'useMarkdown'   =>  $markdown
         ];
 
         return $this->submitRequest($data);
