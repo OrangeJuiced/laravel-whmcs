@@ -113,14 +113,18 @@ class WHMCS extends WhmcsCore {
      * @param int $department_id
      * @return array
      */
-    public function getTickets($client_id, $status = null, $department_id = null, $start = 0, $limit = 25)
+    public function getTickets($client_id = null, $status = null, $department_id = null, $start = 0, $limit = 25)
     {
         $data = [
             'action'        =>  'GetTickets',
-            'clientid'      =>  $client_id,
+            'deptid'        =>  $department_id,
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
+
+        if ($client_id) {
+            $data['status'] = $client_id;
+        }
 
         if ($status) {
             $data['status'] = $status;
