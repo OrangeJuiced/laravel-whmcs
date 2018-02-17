@@ -117,7 +117,6 @@ class WHMCS extends WhmcsCore {
     {
         $data = [
             'action'        =>  'GetTickets',
-            'deptid'        =>  $department_id,
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
