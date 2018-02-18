@@ -123,7 +123,7 @@ class WHMCS extends WhmcsCore {
         ];
 
         if ($client_id) {
-            $data['status'] = $client_id;
+            $data['clientid'] = $client_id;
         }
 
         if ($status) {
