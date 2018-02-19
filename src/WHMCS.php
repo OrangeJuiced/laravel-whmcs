@@ -109,11 +109,15 @@ class WHMCS extends WhmcsCore {
      * Returns a list of tickets.
      *
      * @param int $client_id
+     * @param int $start
+     * @param int $limit
+     * @param string $subject
      * @param string $status
      * @param int $department_id
+     * @param string $ignoredept
      * @return array
      */
-    public function getTickets($client_id = null, $status = null, $department_id = null, $start = 0, $limit = 50, $ignoredept = 'false')
+    public function getTickets($client_id = null, $start = 0, $limit = 50, $subject = null, $status = null, $department_id = null, $ignoredept = 'false')
     {
         $data = [
             'action'                   =>  'GetTickets',
@@ -121,6 +125,10 @@ class WHMCS extends WhmcsCore {
             'limitnum'                 =>  $limit,
             'ignore_dept_assignments'  =>  $ignoredept,
         ];
+
+        if ($subject) {
+            $data['subject'] = $subject;
+        }
 
         if ($client_id) {
             $data['clientid'] = $client_id;
