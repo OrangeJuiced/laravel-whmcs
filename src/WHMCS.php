@@ -170,7 +170,7 @@ class WHMCS extends WhmcsCore {
     }
 
     /**
-     * Creates a new ticket.
+     * Adds a new reply to a ticket.
      *
      * @param int $client_id
      * @param int $department_id
@@ -187,6 +187,24 @@ class WHMCS extends WhmcsCore {
             'ticketid'      =>  $ticket_id,
             'message'       =>  $message,
             'useMarkdown'   =>  $markdown
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Retrieves a specific ticket.
+     *
+     * @param int $ticket_id
+     * @param string $sort
+     * @return array
+     */
+    public function GetTicket($ticket_id, $sort)
+    {
+        $data = [
+            'action'        =>  'GetTicket',
+            'ticketid'      =>  $ticket_id,
+            'repliessort'   =>  $client_id,
         ];
 
         return $this->submitRequest($data);
