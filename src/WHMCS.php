@@ -204,7 +204,7 @@ class WHMCS extends WhmcsCore {
         $data = [
             'action'        =>  'GetTicket',
             'ticketid'      =>  $ticket_id,
-            'repliessort'   =>  $client_id,
+            'repliessort'   =>  $sort,
         ];
 
         return $this->submitRequest($data);
