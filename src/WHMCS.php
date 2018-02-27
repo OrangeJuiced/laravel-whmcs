@@ -199,11 +199,11 @@ class WHMCS extends WhmcsCore {
      * @param string $sort
      * @return array
      */
-    public function GetTicket($ticket_id, $sort)
+    public function GetTicket($ticket_num, $sort)
     {
         $data = [
             'action'        =>  'GetTicket',
-            'ticketid'      =>  $ticket_id,
+            'ticketnum'      =>  $ticket_num,
             'repliessort'   =>  $sort,
         ];
 
