@@ -179,11 +179,11 @@ class WHMCS extends WhmcsCore {
      * @param boolean $markdown
      * @return array
      */
-    public function AddTicketReply($client_id, $ticket_id, $message, $markdown = true)
+    public function addTicketReply($client_id, $ticket_id, $message, $markdown = true)
     {
         $data = [
             'action'        =>  'AddTicketReply',
-            'userid'        =>  $client_id,
+            'clientid'      =>  $client_id,
             'ticketid'      =>  $ticket_id,
             'message'       =>  $message,
             'useMarkdown'   =>  $markdown
@@ -199,11 +199,11 @@ class WHMCS extends WhmcsCore {
      * @param string $sort
      * @return array
      */
-    public function GetTicket($ticket_num, $sort)
+    public function getTicket($ticket_num, $sort)
     {
         $data = [
             'action'        =>  'GetTicket',
-            'ticketnum'      =>  $ticket_num,
+            'ticketnum'     =>  $ticket_num,
             'repliessort'   =>  $sort,
         ];
 
