@@ -195,7 +195,7 @@ class WHMCS extends WhmcsCore {
     /**
      * Retrieves a specific ticket.
      *
-     * @param int $ticket_id
+     * @param int $ticket_num
      * @param string $sort
      * @return array
      */
@@ -205,6 +205,22 @@ class WHMCS extends WhmcsCore {
             'action'        =>  'GetTicket',
             'ticketnum'     =>  $ticket_num,
             'repliessort'   =>  $sort,
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Retrieves the available support departments.
+     *
+     * @param bool $ignore_dept_assignments
+     * @return array
+     */
+    public function getSupportDepartments($ignore_dept_assignments = true)
+    {
+        $data = [
+            'action'                    =>  'GetSupportDepartments',
+            'ignore_dept_assignments'   => $ignore_dept_assignments,
         ];
 
         return $this->submitRequest($data);
