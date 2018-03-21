@@ -227,4 +227,21 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+    
+    /**
+     * Update a ticket.
+     *
+     * @param string $status
+     * @return array
+     */
+    public function updateTicket($ticket_id, $status)
+    {
+        $data = [
+            'action'     =>  'UpdateTicket',
+            'ticketid'   =>  $ticket_id,
+            'status'     =>  $status,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
