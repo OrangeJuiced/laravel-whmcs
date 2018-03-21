@@ -175,13 +175,12 @@ class WHMCS extends WhmcsCore {
      * Adds a new reply to a ticket.
      *
      * @param int $client_id
-     * @param int $department_id
-     * @param string $subject
+     * @param string $ticket_num
      * @param string $message
      * @param boolean $markdown
      * @return array
      */
-    public function addTicketReply($client_id, $ticket_id, $message, $markdown = true)
+    public function addTicketReply($client_id, $ticket_num, $message, $markdown = true)
     {
         $data = [
             'action'        =>  'AddTicketReply',
@@ -227,7 +226,7 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
-    
+
     /**
      * Update a ticket.
      *
