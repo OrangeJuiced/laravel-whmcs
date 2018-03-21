@@ -185,7 +185,7 @@ class WHMCS extends WhmcsCore {
         $data = [
             'action'        =>  'AddTicketReply',
             'clientid'      =>  $client_id,
-            'ticketid'      =>  $ticket_num,
+            'ticketnum'      =>  $ticket_num,
             'message'       =>  $message,
             'useMarkdown'   =>  $markdown,
         ];
