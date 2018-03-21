@@ -151,19 +151,21 @@ class WHMCS extends WhmcsCore {
      * @param int $client_id
      * @param int $department_id
      * @param string $subject
+     * @param string $priority
      * @param string $message
      * @param boolean $markdown
      * @return array
      */
-    public function openTicket($client_id, $department_id, $subject, $message, $markdown = true)
+    public function openTicket($client_id, $department_id, $subject, $priority, $message, $markdown = true)
     {
         $data = [
             'action'        =>  'OpenTicket',
             'clientid'      =>  $client_id,
             'deptid'        =>  $department_id,
             'subject'       =>  $subject,
+            'priority'      =>  $priority,
             'message'       =>  $message,
-            'markdown'      =>  $markdown
+            'markdown'      =>  $markdown,
         ];
 
         return $this->submitRequest($data);
@@ -186,7 +188,7 @@ class WHMCS extends WhmcsCore {
             'clientid'      =>  $client_id,
             'ticketid'      =>  $ticket_id,
             'message'       =>  $message,
-            'useMarkdown'   =>  $markdown
+            'useMarkdown'   =>  $markdown,
         ];
 
         return $this->submitRequest($data);
@@ -220,7 +222,7 @@ class WHMCS extends WhmcsCore {
     {
         $data = [
             'action'                    =>  'GetSupportDepartments',
-            'ignore_dept_assignments'   => $ignore_dept_assignments,
+            'ignore_dept_assignments'   =>  $ignore_dept_assignments,
         ];
 
         return $this->submitRequest($data);
