@@ -54,6 +54,23 @@ class WHMCS extends WhmcsCore {
     }
 
     /**
+     * Updates client information.
+     * For value_updates, pass an array of key => value combinations.
+     * @param $client_id
+     * @param $value_updates
+     * @return array
+     */
+    public function UpdateClient($client_id, $value_updates)
+    {
+        $data = [
+            'action' => 'UpdateClient',
+            'clientid' => $client_id,
+        ];
+        $data = array_merge($data, $value_updates);
+        return $this->submitRequest($data);
+    }
+
+    /**
      * Returns the specified client's domainss
      *
      * @param string|int $clientId
