@@ -7,7 +7,7 @@ use WHMCS\Error\WHMCSConnectionException;
 use WHMCS\Error\WHMCSResultException;
 
 class WhmcsCore {
-        
+
     /**
      * @var \GuzzleHttp\Client
      */
@@ -16,12 +16,12 @@ class WhmcsCore {
     /**
      * @var string
      */
-    protected $username;
+    protected $identifier;
 
     /**
      * @var string
      */
-    protected $password;
+    protected $secret;
 
     /**
      * @var int
@@ -35,14 +35,14 @@ class WhmcsCore {
 
     /**
      * Instantiate a new instance
-     * 
+     *
      * @return void
      */
     public function __construct()
     {
-        $this->username         = config('whmcs.username');
-        $this->password         = config('whmcs.password');
-        $this->response_type    = strtolower(config('whmcs.response_type'));
+        $this->identifier     = config('whmcs.identifier');
+        $this->secret         = config('whmcs.secret');
+        $this->response_type  = strtolower(config('whmcs.response_type'));
 
         $this->client = new Client([
             'base_uri'  => config('whmcs.url'),
@@ -53,8 +53,8 @@ class WhmcsCore {
 
     /**
      * Respond to a WHMCS request
-     * 
-     * @param type 
+     *
+     * @param type
      * @return array
      */
     public function submitRequest($data, $requiresuccess = true)
@@ -89,15 +89,15 @@ class WhmcsCore {
     }
 
     /**
-     * Adds the WHMCS username, password and response to the request
-     * 
+     * Adds the WHMCS secret, identifier and response to the request
+     *
      * @param array $params
      * @return array
      */
     protected function addNecessaryParams($params)
     {
-        $params['username']         = $this->username;
-        $params['password']         = md5($this->password);
+        $params['identifier']       = $this->identifier;
+        $params['secret']           = $this->secret;
         $params['responsetype']     = $this->response_type;
 
         return $params;
