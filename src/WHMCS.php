@@ -250,14 +250,13 @@ class WHMCS extends WhmcsCore {
      * @param string $status
      * @return array
      */
-    public function updateTicket($ticket_id, $status)
+    public function updateTicket($ticket_id, $dataToUpdate)
     {
         $data = [
             'action'     =>  'UpdateTicket',
             'ticketid'   =>  $ticket_id,
-            'status'     =>  $status,
         ];
-
+        $data = array_merge($data, $dataToUpdate);
         return $this->submitRequest($data);
     }
 }

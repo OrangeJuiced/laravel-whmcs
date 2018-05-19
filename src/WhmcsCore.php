@@ -3,6 +3,8 @@
 namespace WHMCS;
 
 use GuzzleHttp\Client;
+use WHMCS\Error\WHMCSConnectionException;
+use WHMCS\Error\WHMCSResultException;
 
 class WhmcsCore {
         
@@ -55,16 +57,35 @@ class WhmcsCore {
      * @param type 
      * @return array
      */
-    public function submitRequest($data)
+    public function submitRequest($data, $requiresuccess = true)
     {
-        $data = $this->addNecessaryParams($data);
-        $response = $this->client->request('POST', '', [
-            'query' => $data,
-            'http_errors' => true,
-            'verify' => false
-        ]);
+        try {
+            $data = $this->addNecessaryParams($data);
+            $response = $this->client->request('POST', '', [
+                'query' => $data,
+                'http_errors' => true,
+                'verify' => false
+            ]);
 
-        return $this->handleResponse($response);
+            $response = $this->handleResponse($response);
+
+           // If the response MUST have a success result, we will throw an exception.
+            if ($requiresuccess)
+            {
+                if ($response["result"] !== "success")
+                {
+                    if ($response["result"] == "error")
+                    {
+                        throw new WHMCSResultException("Request failed with error: " . $response["message"]);
+                    }
+                    throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["result"]);
+                }
+                return $response;
+            }
+        }catch(\Exception $e)
+        {
+            throw new WHMCSConnectionException($e->getMessage());
+        }
     }
 
     /**
