@@ -259,4 +259,17 @@ class WHMCS extends WhmcsCore {
         $data = array_merge($data, $dataToUpdate);
         return $this->submitRequest($data);
     }
+
+    public function getInvoices($client_id, $limitstart, $limitnum, $status)
+    {
+        $data = [
+            'action'        =>  'GetInvoices',
+            'userid'        =>  $client_id,
+            'limitstart'    =>  $limitstart,
+            'limitnum'      =>  $limitnum,
+            'status'        =>  $status,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
