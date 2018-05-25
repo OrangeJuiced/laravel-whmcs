@@ -109,6 +109,20 @@ class WHMCS extends WhmcsCore {
     }
 
     /**
+     * Returns a list of product types
+     *
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
+    public function getAllProducts()
+    {
+        $data = [
+            'action'        =>  'GetProducts',
+        ];
+
+        return $this->submitRequest($data);
+    }
+    /**
      * Creates a new client
      *
      * @param array $data
@@ -260,6 +274,16 @@ class WHMCS extends WhmcsCore {
         return $this->submitRequest($data);
     }
 
+    /**
+     * Returns a list of invoices of a client
+     *
+     * @param $client_id
+     * @param $limitstart
+     * @param $limitnum
+     * @param $status
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
     public function getInvoices($client_id, $limitstart, $limitnum, $status)
     {
         $data = [
@@ -272,6 +296,14 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
+    /**
+     * Returns a specific invoice
+     *
+     * @param $invoiceid
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
     public function getInvoice($invoiceid)
     {
         $data = [
