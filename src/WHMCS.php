@@ -272,4 +272,13 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+    public function getInvoice($invoiceid)
+    {
+        $data = [
+            'action'        =>  'GetInvoice',
+            'invoiceid'     =>  $invoiceid,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
