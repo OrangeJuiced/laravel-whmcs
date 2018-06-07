@@ -313,4 +313,30 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
+    /**
+     * Adds a transaction to the WHMCS backlog.
+     * @param string $paymentmethod
+     * @param int $custom_id
+     * @param int $invoice_id
+     * @param string $transaction_id
+     * @param string $description
+     * @param float $amount
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
+    public function addTransaction(string $paymentmethod, int $custom_id, int $invoice_id, string $transaction_id, string $description, float $amount)
+    {
+        $data = [
+            'action'        => 'AddTransaction',
+            'paymentmethod' => $paymentmethod,
+            'userid'        => $custom_id,
+            'invoiceid'     => $invoice_id,
+            'transid'       => $transaction_id,
+            'description'   => $description,
+            'amountin'      => $amount,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
