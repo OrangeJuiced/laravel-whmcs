@@ -339,4 +339,31 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
+    /**
+     * Adds an order to the WHMCS backlog.
+     *
+     * @param string $paymentmethod
+     * @param int $custom_id
+     * @param array $product_ids
+     * @param array $product_cycles
+     * @param string|null $promocode
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
+    public function addProductOrder(string $paymentmethod, int $custom_id, array $product_ids, array $product_cycles, string $promocode = null)
+    {
+        $data = [
+            'action'        => 'AddOrder',
+            'clientid'      => $custom_id,
+            'paymentmethod' => $paymentmethod,
+            'pid'           => $product_ids,
+            'billingcycle'  => $product_cycles,
+        ];
+        if ($promocode)
+        {
+            $data['promocode'] = $promocode;
+        }
+        return $this->submitRequest($data);
+    }
 }
