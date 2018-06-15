@@ -132,7 +132,8 @@ class WHMCS extends WhmcsCore {
     {
         $data['action'] = 'addclient';
 
-        return $this->submitRequest($data);
+        $response = $this->submitRequest($data);
+        return $response["clientid"];
     }
 
 
