@@ -424,4 +424,24 @@ class WHMCS extends WhmcsCore {
         }
         return $this->submitRequest($data);
     }
+
+    /**
+     * Cancels a subscription (or at least sends the request to cancel)
+     * @param int $serviceid
+     * @param string $canceltype
+     * @param string $reason
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
+    public function cancelSubscription(int $serviceid, string $canceltype, string $reason)
+    {
+        $data = [
+            'action'        => 'AddCancelRequest',
+            'serviceid'     => $serviceid,
+            'type'          => $canceltype,
+            'reason'        => $reason
+            ];
+
+        return $this->submitRequest($data);
+    }
 }
