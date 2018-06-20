@@ -104,7 +104,7 @@ class WHMCS extends WhmcsCore {
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
-
+        
         return $this->submitRequest($data);
     }
 
@@ -364,6 +364,63 @@ class WHMCS extends WhmcsCore {
         if ($promocode)
         {
             $data['promocode'] = $promocode;
+        }
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Upgrades a service to a new product.
+     * @param int $oldid
+     * @param int $newid
+     * @param string $newcycle
+     * @param string $paymentmethod
+     * @param string|null $promocode
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
+    public function upgradeProduct(int $oldid, int $newid, string $newcycle, string $paymentmethod, string $promocode = null)
+    {
+        $data = [
+            'action'                    => 'UpgradeProduct',
+            'serviceid'                 => $oldid,
+            'paymentmethod'             => $paymentmethod,
+            'type'                      => 'product',
+            'newproductid'              => $newid,
+            'newproductbillingcycle'    => ucfirst(strtolower($newcycle)),
+        ];
+        if ($promocode)
+        {
+            $data['promocode']          = $promocode;
+        }
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     *
+     * Calculates the parameters of a product upgrade.
+     * @param int $oldid
+     * @param int $newid
+     * @param string $newcycle
+     * @param string $paymentmethod
+     * @param string|null $promocode
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     */
+    public function calculateProductUpgrade(int $oldid, int $newid, string $newcycle, string $paymentmethod, string $promocode = null)
+    {
+        $data = [
+            'action'                    => 'UpgradeProduct',
+            'calconly'                  => true,
+            'serviceid'                 => $oldid,
+            'paymentmethod'             => $paymentmethod,
+            'type'                      => 'product',
+            'newproductid'              => $newid,
+            'newproductbillingcycle'    => ucfirst(strtolower($newcycle)),
+        ];
+        if ($promocode)
+        {
+            $data['promocode']          = $promocode;
         }
         return $this->submitRequest($data);
     }
