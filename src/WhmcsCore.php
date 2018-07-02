@@ -46,7 +46,7 @@ class WhmcsCore {
 
         $this->client = new Client([
             'base_uri'  => config('whmcs.url'),
-            'timeout'   => config('whmcs.timeout'),
+            'timeout'   => config('whmcs.request_timeout'),
             'headers'   => ['Accept' => 'application/json']
         ]);
     }
@@ -68,25 +68,27 @@ class WhmcsCore {
             ]);
 
             $response = $this->handleResponse($response);
-
-           // If the response MUST have a success result, we will throw an exception.
-            if ($requiresuccess)
-            {
-                if ($response["result"] !== "success")
-                {
-                    if ($response["result"] == "error")
-                    {
-                        throw new WHMCSResultException("Request failed with error: " . $response["message"]);
-                    }
-                    throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["result"]);
-                }
-                return $response;
-            }
         }catch(\Exception $e)
         {
             throw new WHMCSConnectionException($e->getMessage());
         }
+
+        // If the response MUST have a success result, we will throw an exception.
+        if ($requiresuccess)
+        {
+            if ($response["result"] !== "success")
+            {
+                if ($response["result"] == "error")
+                {
+                    throw new WHMCSResultException("Request failed with error: " . $response["message"]);
+                }
+                throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["result"]);
+            }
+            return $response;
+        }
+
     }
+
 
     /**
      * Adds the WHMCS secret, identifier and response to the request
