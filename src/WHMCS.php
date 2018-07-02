@@ -50,7 +50,12 @@ class WHMCS extends WhmcsCore {
             'stats'     =>  $stats
         ];
 
-        return $this->submitRequest($data);
+        $response =  $this->submitRequest($data, false);
+        if ($response["result"] == "error")
+        {
+            return null;
+        }
+        return $response;
     }
 
     /**
@@ -104,7 +109,7 @@ class WHMCS extends WhmcsCore {
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
-        
+
         return $this->submitRequest($data);
     }
 
