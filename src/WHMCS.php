@@ -109,7 +109,6 @@ class WHMCS extends WhmcsCore {
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
-
         return $this->submitRequest($data);
     }
 
@@ -446,6 +445,27 @@ class WHMCS extends WhmcsCore {
             'type'          => $canceltype,
             'reason'        => $reason
             ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Fetches a clients domains.
+     * @param int $customer_id
+     * @param int $limitstart
+     * @param int $limitnum
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getClientsDomains(int $customer_id, int $limitstart, int $limitnum)
+    {
+        $data = [
+            'action'        => 'GetClientsDomains',
+            'limitstart'    => $limitstart,
+            'limitnum'      => $limitnum,
+            'clientid'      => $customer_id,
+        ];
 
         return $this->submitRequest($data);
     }
