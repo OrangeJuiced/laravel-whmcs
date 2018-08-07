@@ -384,13 +384,20 @@ class WHMCS extends WhmcsCore {
      */
     public function upgradeProduct(int $oldid, int $newid, string $newcycle, string $paymentmethod, string $promocode = null)
     {
+        $newcycle = ucfirst(strtolower($newcycle));
+
+        // For some weird reason, semiannually is the exception to WHMC's rule to specify the billing cycle with a capital letter first.
+        if ($newcycle == "Semiannually")
+        {
+            $newcycle = "semiannually";
+        }
         $data = [
             'action'                    => 'UpgradeProduct',
             'serviceid'                 => $oldid,
             'paymentmethod'             => $paymentmethod,
             'type'                      => 'product',
             'newproductid'              => $newid,
-            'newproductbillingcycle'    => ucfirst(strtolower($newcycle)),
+            'newproductbillingcycle'    => $newcycle,
         ];
         if ($promocode)
         {
@@ -413,6 +420,13 @@ class WHMCS extends WhmcsCore {
      */
     public function calculateProductUpgrade(int $oldid, int $newid, string $newcycle, string $paymentmethod, string $promocode = null)
     {
+        $newcycle = ucfirst(strtolower($newcycle));
+
+        // For some weird reason, semiannually is the exception to WHMC's rule to specify the billing cycle with a capital letter first.
+        if ($newcycle == "Semiannually")
+        {
+            $newcycle = "semiannually";
+        }
         $data = [
             'action'                    => 'UpgradeProduct',
             'calconly'                  => true,
@@ -420,7 +434,7 @@ class WHMCS extends WhmcsCore {
             'paymentmethod'             => $paymentmethod,
             'type'                      => 'product',
             'newproductid'              => $newid,
-            'newproductbillingcycle'    => ucfirst(strtolower($newcycle)),
+            'newproductbillingcycle'    => $newcycle,
         ];
         if ($promocode)
         {
