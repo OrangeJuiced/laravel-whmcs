@@ -483,4 +483,43 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
+
+    /**
+     * Renews a domain of a user. 
+     * @param int $customer_id
+     * @param string $domainname
+     * @param int $years
+     * @param string $paymentmethod
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function domainRenew(int $customer_id, string $domainname, int $years, string $paymentmethod)
+    {
+        $data = [
+            'action'            => 'AddOrder',
+            'clientid'          => $customer_id,
+            'paymentmethod'     => $paymentmethod,
+            'domainrenewals'    => array($domainname => $years),
+        ];
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Gets the pricing for a certain TLD. Requires a User id because the API is weird like that.
+     * @param int $user_id
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getTLDPricing(int $user_id)
+    {
+        $data = [
+            'action'    => 'GetTLDPricing',
+            'clientid'  => $user_id,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
