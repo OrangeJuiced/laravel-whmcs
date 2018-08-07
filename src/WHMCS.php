@@ -356,7 +356,7 @@ class WHMCS extends WhmcsCore {
      * @return array
      * @throws Error\WHMCSConnectionException
      */
-    public function addProductOrder(string $paymentmethod, int $custom_id, array $product_ids, array $product_cycles, string $promocode = null)
+    public function addOrder(string $paymentmethod, int $custom_id, array $product_ids, array $product_cycles, array $domain_names, array $domain_durations, array $domain_types, array $domain_epps, string $promocode = null)
     {
         $data = [
             'action'        => 'AddOrder',
@@ -368,6 +368,15 @@ class WHMCS extends WhmcsCore {
         if ($promocode)
         {
             $data['promocode'] = $promocode;
+        }
+
+        if (count($domain_names) > 0)
+        {
+            // For each domain name, WHMCS wants an extra entry in the type array. With new orders, this will always be register.
+            $data['domaintype'] = $domain_types;
+            $data['regperiod'] = $domain_durations;
+            $data['domain'] = $domain_names;
+            $data['eppcode'] = $domain_epps;
         }
         return $this->submitRequest($data);
     }
@@ -486,7 +495,7 @@ class WHMCS extends WhmcsCore {
 
 
     /**
-     * Renews a domain of a user. 
+     * Renews a domain of a user.
      * @param int $customer_id
      * @param string $domainname
      * @param int $years
@@ -518,6 +527,23 @@ class WHMCS extends WhmcsCore {
         $data = [
             'action'    => 'GetTLDPricing',
             'clientid'  => $user_id,
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Returns Whois information of a given domain.
+     * @param string $domain
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getDomainWhois(string $domain)
+    {
+        $data = [
+            'action'    => 'DomainWhois',
+            'domain'    =>  $domain,
         ];
 
         return $this->submitRequest($data);
