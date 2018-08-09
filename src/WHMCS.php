@@ -516,17 +516,17 @@ class WHMCS extends WhmcsCore {
     }
 
     /**
-     * Gets the pricing for a certain TLD. Requires a User id because the API is weird like that.
+     * Gets the pricing for a certain TLD. Requires a Currency ID instead of a code because the API is weird like that.
      * @param int $user_id
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function getTLDPricing(int $user_id)
+    public function getTLDPricing(int $currency_id)
     {
         $data = [
             'action'    => 'GetTLDPricing',
-            'clientid'  => $user_id,
+            'currencyid'  => $currency_id,
         ];
 
         return $this->submitRequest($data);
@@ -544,6 +544,36 @@ class WHMCS extends WhmcsCore {
         $data = [
             'action'    => 'DomainWhois',
             'domain'    =>  $domain,
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Returns an array of currency information.
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getCurrencies()
+    {
+        $data = [
+            'action'    => 'GetCurrencies',
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Returns an array of payment method information.
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getPaymentMethods()
+    {
+        $data = [
+            'action'    => 'GetPaymentMethods',
         ];
 
         return $this->submitRequest($data);
