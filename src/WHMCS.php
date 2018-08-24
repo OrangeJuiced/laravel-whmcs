@@ -581,12 +581,12 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Gets the nameservers of a domain.
-     * @param $id
+     * @param int $id
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function getDomainNameservers($id)
+    public function getDomainNameservers(int $id)
     {
         $data = [
             'action'    => 'DomainGetNameservers',
@@ -599,17 +599,17 @@ class WHMCS extends WhmcsCore {
     /**
      * Updates the nameservers of a domain.
      * Ns1 and ns2 are required, ns3 through 5 are updated if supplied.
-     * @param $id
-     * @param $ns1
-     * @param $ns2
-     * @param null $ns3
-     * @param null $ns4
-     * @param null $ns5
+     * @param int $id
+     * @param string $ns1
+     * @param string $ns2
+     * @param string|null $ns3
+     * @param string|null $ns4
+     * @param string|null $ns5
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function updateDomainNameServers($id, $ns1, $ns2, $ns3 = null, $ns4 = null, $ns5 = null)
+    public function updateDomainNameServers(int $id, string $ns1, string $ns2, string $ns3 = null, string $ns4 = null, string $ns5 = null)
     {
         $data = [
             'action'    => 'DomainUpdateNameservers',
@@ -637,16 +637,52 @@ class WHMCS extends WhmcsCore {
      * Requests an EPP code for a domain.
      * If you only get a result success, the EPP is probably sent to the client
      * directly.
-     * @param $id
+     * @param int $id
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function requestDomainEpp($id)
+    public function requestDomainEpp(int $id)
     {
         $data = [
             'action'    => 'DomainRequestEpp',
             'domainid'  => $id,
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Gets Whois info (More in detail, using the int)
+     * @param int $id
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getDomainWhoisInfo(int $id)
+    {
+        $data = [
+            'action'    => 'DomainGetWhoisInfo',
+            'domainid'  => $id
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Updates the domain whois info based on an xml string of a given domain.
+     * @param int $id
+     * @param string $xml
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function updateDomainWhoisInfo(int $id, string $xml)
+    {
+        $data = [
+            'action'    => 'DomainUpdateWhoisInfo',
+            'domainid'  => $id,
+            'xml'       => $xml,
         ];
 
         return $this->submitRequest($data);
