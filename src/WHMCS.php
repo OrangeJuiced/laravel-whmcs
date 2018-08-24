@@ -372,7 +372,7 @@ class WHMCS extends WhmcsCore {
 
         if (count($domain_names) > 0)
         {
-            // For each domain name, WHMCS wants an extra entry in the type array. With new orders, this will always be register.
+            // For each domain name, WHMCS wants an extra entry in the type array.
             $data['domaintype'] = $domain_types;
             $data['regperiod'] = $domain_durations;
             $data['domain'] = $domain_names;
@@ -574,6 +574,79 @@ class WHMCS extends WhmcsCore {
     {
         $data = [
             'action'    => 'GetPaymentMethods',
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Gets the nameservers of a domain.
+     * @param $id
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getDomainNameservers($id)
+    {
+        $data = [
+            'action'    => 'DomainGetNameservers',
+            'domainid'  => $id,
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Updates the nameservers of a domain.
+     * Ns1 and ns2 are required, ns3 through 5 are updated if supplied.
+     * @param $id
+     * @param $ns1
+     * @param $ns2
+     * @param null $ns3
+     * @param null $ns4
+     * @param null $ns5
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function updateDomainNameServers($id, $ns1, $ns2, $ns3 = null, $ns4 = null, $ns5 = null)
+    {
+        $data = [
+            'action'    => 'DomainUpdateNameservers',
+            'domainid'  => $id,
+            'ns1'       => $ns1,
+            'ns2'       => $ns2,
+        ];
+        if ($ns3)
+        {
+            $data['ns3'] = $ns3;
+        }
+        if ($ns4)
+        {
+            $data['ns4'] = $ns4;
+        }
+        if ($ns4)
+        {
+            $data['ns4'] = $ns5;
+        }
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Requests an EPP code for a domain.
+     * If you only get a result success, the EPP is probably sent to the client
+     * directly.
+     * @param $id
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function requestDomainEpp($id)
+    {
+        $data = [
+            'action'    => 'DomainRequestEpp',
+            'domainid'  => $id,
         ];
 
         return $this->submitRequest($data);
