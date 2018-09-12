@@ -493,7 +493,6 @@ class WHMCS extends WhmcsCore {
         return $this->submitRequest($data);
     }
 
-
     /**
      * Renews a domain of a user.
      * @param int $customer_id
@@ -684,6 +683,27 @@ class WHMCS extends WhmcsCore {
             'domainid'  => $id,
             'xml'       => $xml,
         ];
+
+        return $this->submitRequest($data);
+    }
+
+    /**
+     * Get a single or all promotion codes
+     *
+     * @param string $code
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getPromotions(string $code = null)
+    {
+        $data = [
+            'action'    => 'GetPromotions',
+        ];
+
+        if ($code) {
+            $data['code'] = $code;
+        }
 
         return $this->submitRequest($data);
     }
