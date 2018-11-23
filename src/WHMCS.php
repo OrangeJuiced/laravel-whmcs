@@ -718,4 +718,15 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data, false);
     }
+
+    public function getCancelledPackages()
+    {
+        $data = [
+            'action'        => 'GetCancelledPackages',
+            'limitstart'    => 0,
+            'limitnum'      => 999999999999,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
