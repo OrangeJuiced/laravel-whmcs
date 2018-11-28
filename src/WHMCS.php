@@ -534,18 +534,19 @@ class WHMCS extends WhmcsCore {
     /**
      * Returns Whois information of a given domain.
      * @param string $domain
+     * @param bool $require_success = false
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function getDomainWhois(string $domain)
+    public function getDomainWhois(string $domain, bool $require_success = false)
     {
         $data = [
             'action'    => 'DomainWhois',
             'domain'    =>  $domain,
         ];
 
-        return $this->submitRequest($data);
+        return $this->submitRequest($data, $require_success);
     }
 
     /**
