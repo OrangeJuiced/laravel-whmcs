@@ -729,4 +729,30 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
+    public function getOrders(int $custom_id, string $status = null)
+    {
+        $data = [
+            'action'        => 'GetOrders',
+            'limitstart'    => 0,
+            'limitnum'      => 999999999999,
+            'userid'        => $custom_id,
+        ];
+        if ($status)
+        {
+            $data['status'] = $status;
+        }
+        return $this->submitRequest($data);
+    }
+    public function cancelOrder(int $orderid, bool $cancelsub = false, bool $noemail = true)
+    {
+        $data = [
+            'action'    => 'CancelOrder',
+            'orderid'   => $orderid,
+            'cancelsub' => $cancelsub,
+            'noemail'   => $noemail,
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
