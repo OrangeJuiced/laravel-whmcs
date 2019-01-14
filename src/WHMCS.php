@@ -180,19 +180,24 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
-
-    /**
-     * Creates a new ticket.
-     *
-     * @param int $client_id
-     * @param int $department_id
-     * @param string $subject
-     * @param string $priority
-     * @param string $message
-     * @param boolean $markdown
-     * @return array
-     */
-    public function openTicket($client_id, $department_id, $subject, $priority, $message, $markdown = true)
+	
+	/**
+	 * Creates a new ticket.
+	 *
+	 * @param int     $client_id
+	 * @param int     $department_id
+	 * @param string  $subject
+	 * @param string  $priority
+	 * @param string  $message
+	 * @param boolean $markdown
+	 * @param int    $product_id
+	 * @param boolean    $is_domain
+	 *
+	 * @return array
+	 * @throws Error\WHMCSConnectionException
+	 * @throws Error\WHMCSResultException
+	 */
+    public function openTicket($client_id, $department_id, $subject, $priority, $message, $markdown = true, $product_id = null, $is_domain = null)
     {
         $data = [
             'action'        =>  'OpenTicket',
@@ -203,6 +208,18 @@ class WHMCS extends WhmcsCore {
             'message'       =>  $message,
             'markdown'      =>  $markdown,
         ];
+
+        if($product_id != null && $is_domain != null){
+        	if($is_domain == null){
+        		throw new \Exception('is_domain not given');
+	        } else {
+        		if($is_domain){
+			        $data['domainid'] = $product_id;
+		        } else if(!$is_domain) {
+			        $data['serviceid'] = $product_id;
+		        }
+	        }
+        }
 
         return $this->submitRequest($data);
     }
