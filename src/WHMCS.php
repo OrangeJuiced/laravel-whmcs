@@ -209,7 +209,7 @@ class WHMCS extends WhmcsCore {
             'markdown'      =>  $markdown,
         ];
 
-        if($product_id != null){
+        if($product_id){
         	if($is_domain == null){
         	        $data['serviceid'] = $product_id;	
 	        } else {
