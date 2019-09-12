@@ -770,4 +770,18 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
+    public function getTransactions($search, $value)
+    {
+        if (! in_array($search, ['invoiceid', 'clientid', 'transid']))
+        {
+            throw new WHMCSResultException('Cannot find transactions by ' + $search + ". Please use invoiceid, clientid or transid.");
+        }
+        $data = [
+            'action' => 'GetTransactions',
+            $search => $value
+        ];
+
+        return $this->submitRequest($data);
+    }
 }
