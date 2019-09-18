@@ -180,7 +180,7 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
-	
+
 	/**
 	 * Creates a new ticket.
 	 *
@@ -211,7 +211,7 @@ class WHMCS extends WhmcsCore {
 
         if($product_id){
         	if($is_domain == null){
-        	        $data['serviceid'] = $product_id;	
+        	        $data['serviceid'] = $product_id;
 	        } else {
         		if($is_domain == true)
 			        $data['domainid'] = $product_id;
@@ -420,13 +420,16 @@ class WHMCS extends WhmcsCore {
             'paymentmethod'             => $paymentmethod,
             'type'                      => 'product',
             'newproductid'              => $newid,
-            'newproductbillingcycle'    => $newcycle,
         ];
+
+        if ($newcycle != '')
+        {
+            $data['newproductbillingcycle'] = $newcycle;
+        }
         if ($promocode)
         {
             $data['promocode']          = $promocode;
         }
-
         return $this->submitRequest($data);
     }
 
@@ -780,6 +783,17 @@ class WHMCS extends WhmcsCore {
         $data = [
             'action' => 'GetTransactions',
             $search => $value
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+
+    public function getOrderById(int $orderid)
+    {
+        $data = [
+            'action' => 'GetOrders',
+            'id'    => $orderid
         ];
 
         return $this->submitRequest($data);
