@@ -55,7 +55,10 @@ class WhmcsCore {
      * Respond to a WHMCS request
      *
      * @param type
+     * @param bool $requiresuccess
      * @return array
+     * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function submitRequest($data, $requiresuccess = true)
     {
@@ -68,8 +71,7 @@ class WhmcsCore {
             ]);
 
             $response = $this->handleResponse($response);
-        }catch(\Exception $e)
-        {
+        } catch(\Exception $e) {
             throw new WHMCSConnectionException($e->getMessage());
         }
 
