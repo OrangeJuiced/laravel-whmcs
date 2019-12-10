@@ -254,19 +254,40 @@ class WHMCS extends WhmcsCore {
     }
 
     /**
-     * Retrieves a specific ticket.
+     * Retrieves a specific ticket by num.
      *
-     * @param int $ticket_num
+     * @param $num
      * @param string $sort
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function getTicket($ticket_num, $sort)
+    public function getTicketByNum($num, $sort)
     {
         $data = [
             'action'        =>  'GetTicket',
-            'ticketnum'     =>  $ticket_num,
+            'ticketnum'     =>  $num,
+            'repliessort'   =>  $sort,
+        ];
+
+        return $this->submitRequest($data);
+    }
+
+
+    /**
+     * Retrieves a specific ticket.
+     *
+     * @param $id
+     * @param string $sort
+     * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
+     */
+    public function getTicketById($id, $sort)
+    {
+        $data = [
+            'action'        =>  'GetTicket',
+            'ticketid'      =>  $id,
             'repliessort'   =>  $sort,
         ];
 
