@@ -84,10 +84,14 @@ class WHMCS extends WhmcsCore {
     }
 
     /**
-     * Returns the specified client's domainss
+     * Returns the specified client's domains
      *
-     * @param string|int $clientId
+     * @param $client_id
+     * @param int $start
+     * @param int $limit
      * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
      */
     public function getClientDomains($client_id, $start = 0, $limit = 25)
     {
@@ -104,19 +108,23 @@ class WHMCS extends WhmcsCore {
     /**
      * Return a list of a client's products
      *
-     * @param int $client_id
+     * @param null $clientId
      * @param int $start
      * @param int $limit
      * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
      */
-    public function getClientProducts($client_id, $start = 0, $limit = 25)
+    public function getClientProducts($clientId = null, $start = 0, $limit = 25)
     {
         $data = [
             'action'        =>  'GetClientsProducts',
-            'clientid'      =>  $client_id,
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
+
+        if($clientId) $data['clientid'] = $clientId;
+
         return $this->submitRequest($data);
     }
 
@@ -125,6 +133,7 @@ class WHMCS extends WhmcsCore {
      *
      * @return array
      * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
      */
     public function getAllProducts()
     {
@@ -134,11 +143,14 @@ class WHMCS extends WhmcsCore {
 
         return $this->submitRequest($data);
     }
+
     /**
      * Creates a new client
      *
      * @param array $data
      * @return array
+     * @throws Error\WHMCSConnectionException
+     * @throws Error\WHMCSResultException
      */
     public function createClient($data)
     {
