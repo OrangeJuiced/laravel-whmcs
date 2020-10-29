@@ -1,5 +1,6 @@
 <?php
-Namespace WHMCS\Error;
+namespace WHMCS\Exceptions;
+
 use Illuminate\Support\Facades\Log;
 
 class WHMCSResultException extends \Exception

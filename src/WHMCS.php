@@ -2,6 +2,9 @@
 
 namespace WHMCS;
 
+use WHMCS\Exceptions\WHMCSConnectionException;
+use WHMCS\Exceptions\WHMCSResultException;
+
 class WHMCS extends WhmcsCore {
 
     /**
@@ -17,15 +20,15 @@ class WHMCS extends WhmcsCore {
     /**
      * Return all clients.
      *
-     * @param int $start
-     * @param int $limit
-     * @param string $sorting
-     * @param string $search
+     * @param int|null $start
+     * @param int|null $limit
+     * @param string|null $sorting
+     * @param string|null $search
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function getClients(int $start = null, int $limit = null, string $sorting = null, string $search = null)
+    public function getClients($start = null, $limit = null, $sorting = null, $search = null)
     {
         $data = [
             'action' => 'GetClients',
@@ -43,10 +46,11 @@ class WHMCS extends WhmcsCore {
      * Returns the specified client's data
      *
      * @param null $clientId
+     * @param null $email
      * @param bool $stats
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getClientsDetails($clientId = null, $email = null, $stats = null)
     {
@@ -68,8 +72,8 @@ class WHMCS extends WhmcsCore {
      * @param $client_id
      * @param $value_updates
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function UpdateClient($client_id, $value_updates)
     {
@@ -79,7 +83,7 @@ class WHMCS extends WhmcsCore {
         ];
 
         $data = array_merge($data, $value_updates);
-        
+
         return $this->submitRequest($data);
     }
 
@@ -90,8 +94,8 @@ class WHMCS extends WhmcsCore {
      * @param int $start
      * @param int $limit
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getClientDomains($client_id, $start = 0, $limit = 25)
     {
@@ -113,15 +117,15 @@ class WHMCS extends WhmcsCore {
      * @param int $start
      * @param int $limit
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getClientProducts($clientId = null, $serviceId = null, $start = 0, $limit = 25)
     {
         $data = [
-            'action'        =>  'GetClientsProducts',
-            'limitstart'    =>  $start,
-            'limitnum'      =>  $limit
+            'action' => 'GetClientsProducts',
+            'limitstart' => $start,
+            'limitnum' => $limit
         ];
 
         if($clientId) $data['clientid'] = $clientId;
@@ -134,13 +138,13 @@ class WHMCS extends WhmcsCore {
      * Returns a list of product types
      *
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getAllProducts()
     {
         $data = [
-            'action'        =>  'GetProducts',
+            'action' => 'GetProducts',
         ];
 
         return $this->submitRequest($data);
@@ -151,14 +155,15 @@ class WHMCS extends WhmcsCore {
      *
      * @param array $data
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function createClient($data)
     {
         $data['action'] = 'addclient';
 
         $response = $this->submitRequest($data);
+
         return $response["clientid"];
     }
 
@@ -174,14 +179,16 @@ class WHMCS extends WhmcsCore {
      * @param int $department_id
      * @param string $ignoredept
      * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getTickets($client_id = null, $start = 0, $limit = 50, $subject = null, $status = null, $department_id = null, $ignoredept = 'false')
     {
         $data = [
-            'action'                   =>  'GetTickets',
-            'limitstart'               =>  $start,
-            'limitnum'                 =>  $limit,
-            'ignore_dept_assignments'  =>  $ignoredept,
+            'action' => 'GetTickets',
+            'limitstart' => $start,
+            'limitnum' => $limit,
+            'ignore_dept_assignments' => $ignoredept,
         ];
 
         if ($subject) {
@@ -203,41 +210,41 @@ class WHMCS extends WhmcsCore {
         return $this->submitRequest($data);
     }
 
-	/**
-	 * Creates a new ticket.
-	 *
-	 * @param int     $client_id
-	 * @param int     $department_id
-	 * @param string  $subject
-	 * @param string  $priority
-	 * @param string  $message
-	 * @param boolean $markdown
-	 * @param int    $product_id
-	 * @param boolean    $is_domain
-	 *
-	 * @return array
-	 * @throws Error\WHMCSConnectionException
-	 * @throws Error\WHMCSResultException
-	 */
+    /**
+     * Creates a new ticket.
+     *
+     * @param int $client_id
+     * @param int $department_id
+     * @param string $subject
+     * @param string $priority
+     * @param string $message
+     * @param boolean $markdown
+     * @param int $product_id
+     * @param boolean $is_domain
+     *
+     * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
+     */
     public function openTicket($client_id, $department_id, $subject, $priority, $message, $markdown = true, $product_id = null, $is_domain = null)
     {
         $data = [
-            'action'        =>  'OpenTicket',
-            'clientid'      =>  $client_id,
-            'deptid'        =>  $department_id,
-            'subject'       =>  $subject,
-            'priority'      =>  $priority,
-            'message'       =>  $message,
-            'markdown'      =>  $markdown,
+            'action' => 'OpenTicket',
+            'clientid' => $client_id,
+            'deptid' => $department_id,
+            'subject' => $subject,
+            'priority' => $priority,
+            'message' => $message,
+            'markdown' => $markdown,
         ];
 
         if($product_id){
-        	if($is_domain == null){
-        	        $data['serviceid'] = $product_id;
-	        } else {
-        		if($is_domain == true)
-			        $data['domainid'] = $product_id;
-	        }
+            if($is_domain == null){
+                $data['serviceid'] = $product_id;
+            } else {
+                if($is_domain == true)
+                    $data['domainid'] = $product_id;
+            }
         }
 
         return $this->submitRequest($data);
@@ -251,17 +258,17 @@ class WHMCS extends WhmcsCore {
      * @param string $message
      * @param boolean $markdown
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function addTicketReply($client_id, $ticket_id, $message, $markdown = true)
     {
         $data = [
-            'action'        =>  'AddTicketReply',
-            'clientid'      =>  $client_id,
-            'ticketid'      =>  $ticket_id,
-            'message'       =>  $message,
-            'useMarkdown'   =>  $markdown,
+            'action' => 'AddTicketReply',
+            'clientid' => $client_id,
+            'ticketid' => $ticket_id,
+            'message' => $message,
+            'useMarkdown' => $markdown,
         ];
 
         return $this->submitRequest($data);
@@ -273,15 +280,15 @@ class WHMCS extends WhmcsCore {
      * @param $num
      * @param string $sort
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getTicketByNum($num, $sort)
     {
         $data = [
-            'action'        =>  'GetTicket',
-            'ticketnum'     =>  $num,
-            'repliessort'   =>  $sort,
+            'action' => 'GetTicket',
+            'ticketnum' => $num,
+            'repliessort' => $sort,
         ];
 
         return $this->submitRequest($data);
@@ -294,15 +301,15 @@ class WHMCS extends WhmcsCore {
      * @param $id
      * @param string $sort
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getTicketById($id, $sort)
     {
         $data = [
-            'action'        =>  'GetTicket',
-            'ticketid'      =>  $id,
-            'repliessort'   =>  $sort,
+            'action' => 'GetTicket',
+            'ticketid' => $id,
+            'repliessort' => $sort,
         ];
 
         return $this->submitRequest($data);
@@ -313,14 +320,14 @@ class WHMCS extends WhmcsCore {
      *
      * @param bool $ignore_dept_assignments
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getSupportDepartments($ignore_dept_assignments = true)
     {
         $data = [
-            'action'                    =>  'GetSupportDepartments',
-            'ignore_dept_assignments'   =>  $ignore_dept_assignments,
+            'action' => 'GetSupportDepartments',
+            'ignore_dept_assignments' => $ignore_dept_assignments,
         ];
 
         return $this->submitRequest($data);
@@ -332,16 +339,18 @@ class WHMCS extends WhmcsCore {
      * @param $ticket_id
      * @param $dataToUpdate
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function updateTicket($ticket_id, $dataToUpdate)
     {
         $data = [
-            'action'     =>  'UpdateTicket',
-            'ticketid'   =>  $ticket_id,
+            'action' => 'UpdateTicket',
+            'ticketid' => $ticket_id,
         ];
+
         $data = array_merge($data, $dataToUpdate);
+
         return $this->submitRequest($data);
     }
 
@@ -353,8 +362,8 @@ class WHMCS extends WhmcsCore {
      * @param $limitnum
      * @param $status
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getInvoices($client_id = null, $limitstart = null, $limitnum = null, $status = null)
     {
@@ -378,23 +387,22 @@ class WHMCS extends WhmcsCore {
             $data['status'] = $status;
         }
 
-
         return $this->submitRequest($data);
     }
 
     /**
      * Returns a specific invoice
      *
-     * @param $invoiceid
+     * @param int $invoiceId
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function getInvoice($invoiceid)
+    public function getInvoice(int $invoiceId)
     {
         $data = [
-            'action'        =>  'GetInvoice',
-            'invoiceid'     =>  $invoiceid,
+            'action' => 'GetInvoice',
+            'invoiceid' => $invoiceId,
         ];
 
         return $this->submitRequest($data);
@@ -402,26 +410,27 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Adds a transaction to the WHMCS backlog.
-     * @param string $paymentmethod
+     *
+     * @param string $paymentMethod
      * @param int $custom_id
      * @param int $invoice_id
      * @param string $transaction_id
      * @param string $description
      * @param float $amount
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function addTransaction(string $paymentmethod, int $custom_id, int $invoice_id, string $transaction_id, string $description, float $amount)
+    public function addTransaction(string $paymentMethod, int $custom_id, int $invoice_id, string $transaction_id, string $description, float $amount)
     {
         $data = [
-            'action'        => 'AddTransaction',
-            'paymentmethod' => $paymentmethod,
-            'userid'        => $custom_id,
-            'invoiceid'     => $invoice_id,
-            'transid'       => $transaction_id,
-            'description'   => $description,
-            'amountin'      => $amount,
+            'action' => 'AddTransaction',
+            'paymentmethod' => $paymentMethod,
+            'userid'  => $custom_id,
+            'invoiceid' => $invoice_id,
+            'transid' => $transaction_id,
+            'description' => $description,
+            'amountin' => $amount,
         ];
 
         return $this->submitRequest($data);
@@ -430,7 +439,7 @@ class WHMCS extends WhmcsCore {
     /**
      * Adds an order to the WHMCS backlog.
      *
-     * @param string $paymentmethod
+     * @param string $paymentMethod
      * @param int $custom_id
      * @param array $product_ids
      * @param array $product_cycles
@@ -438,148 +447,153 @@ class WHMCS extends WhmcsCore {
      * @param array $domain_durations
      * @param array $domain_types
      * @param array $domain_epps
-     * @param string $promocode
+     * @param string $promoCode
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function addOrder(string $paymentmethod, int $custom_id, array $product_ids, array $product_cycles, array $domain_names, array $domain_durations, array $domain_types, array $domain_epps, string $promocode = null)
+    public function addOrder(string $paymentMethod, int $custom_id, array $product_ids, array $product_cycles, array $domain_names, array $domain_durations, array $domain_types, array $domain_epps, string $promoCode = null)
     {
         $data = [
-            'action'        => 'AddOrder',
-            'clientid'      => $custom_id,
-            'paymentmethod' => $paymentmethod,
-            'pid'           => $product_ids,
-            'billingcycle'  => $product_cycles,
+            'action' => 'AddOrder',
+            'clientid' => $custom_id,
+            'paymentmethod' => $paymentMethod,
+            'pid' => $product_ids,
+            'billingcycle' => $product_cycles,
         ];
-        if ($promocode)
-        {
-            $data['promocode'] = $promocode;
+
+        if ($promoCode) {
+            $data['promocode'] = $promoCode;
         }
 
-        if (count($domain_names) > 0)
-        {
+        if (count($domain_names) > 0) {
             // For each domain name, WHMCS wants an extra entry in the type array.
             $data['domaintype'] = $domain_types;
             $data['regperiod'] = $domain_durations;
             $data['domain'] = $domain_names;
             $data['eppcode'] = $domain_epps;
         }
+
         return $this->submitRequest($data);
     }
 
     /**
      * Upgrades a service to a new product.
      *
-     * @param int $oldid
-     * @param int $newid
-     * @param string $newcycle
-     * @param string $paymentmethod
-     * @param string $promocode
+     * @param int $oldId
+     * @param int $newId
+     * @param string $newCycle
+     * @param string $paymentMethod
+     * @param string $promoCode
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function upgradeProduct(int $oldid, int $newid, string $newcycle, string $paymentmethod, string $promocode = null)
+    public function upgradeProduct(int $oldId, int $newId, string $newCycle, string $paymentMethod, string $promoCode = null)
     {
-        $newcycle = ucfirst(strtolower($newcycle));
+        $newCycle = ucfirst(strtolower($newCycle));
 
-        // For some weird reason, semiannually is the exception to WHMC's rule to specify the billing cycle with a capital letter first.
-        if ($newcycle == "Semiannually")
-        {
-            $newcycle = "semiannually";
+        // For some weird reason, semiannually is the exception to WHMCS's rule to specify the billing cycle with a capital letter first.
+        if ($newCycle == "Semiannually") {
+            $newCycle = "semiannually";
         }
+
         $data = [
-            'action'                    => 'UpgradeProduct',
-            'serviceid'                 => $oldid,
-            'paymentmethod'             => $paymentmethod,
-            'type'                      => 'product',
-            'newproductid'              => $newid,
+            'action' => 'UpgradeProduct',
+            'serviceid' => $oldId,
+            'paymentmethod' => $paymentMethod,
+            'type' => 'product',
+            'newproductid' => $newId,
         ];
 
-        if ($newcycle != '')
-        {
-            $data['newproductbillingcycle'] = $newcycle;
+        if ($newCycle != '') {
+            $data['newproductbillingcycle'] = $newCycle;
         }
-        if ($promocode)
-        {
-            $data['promocode']          = $promocode;
+
+        if ($promoCode) {
+            $data['promocode'] = $promoCode;
         }
+
         return $this->submitRequest($data);
     }
 
     /**
-     *
      * Calculates the parameters of a product upgrade.
-     * @param int $oldid
-     * @param int $newid
-     * @param string $newcycle
-     * @param string $paymentmethod
-     * @param string|null $promocode
+     *
+     * @param int $oldId
+     * @param int $newId
+     * @param string $newCycle
+     * @param string $paymentMethod
+     * @param string|null $promoCode
      * @return array
-     * @throws Error\WHMCSConnectionException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function calculateProductUpgrade(int $oldid, int $newid, string $newcycle, string $paymentmethod, string $promocode = null)
+    public function calculateProductUpgrade(int $oldId, int $newId, string $newCycle, string $paymentMethod, string $promoCode = null)
     {
-        $newcycle = ucfirst(strtolower($newcycle));
+        $newCycle = ucfirst(strtolower($newCycle));
 
-        // For some weird reason, semiannually is the exception to WHMC's rule to specify the billing cycle with a capital letter first.
-        if ($newcycle == "Semiannually")
-        {
-            $newcycle = "semiannually";
+        // For some weird reason, semiannually is the exception to WHMCS's rule to specify the billing cycle with a capital letter first.
+        if ($newCycle == "Semiannually") {
+            $newCycle = "semiannually";
         }
+
         $data = [
-            'action'                    => 'UpgradeProduct',
-            'calconly'                  => true,
-            'serviceid'                 => $oldid,
-            'paymentmethod'             => $paymentmethod,
-            'type'                      => 'product',
-            'newproductid'              => $newid,
-            'newproductbillingcycle'    => $newcycle,
+            'action' => 'UpgradeProduct',
+            'calconly' => true,
+            'serviceid' => $oldId,
+            'paymentmethod' => $paymentMethod,
+            'type' => 'product',
+            'newproductid' => $newId,
+            'newproductbillingcycle' => $newCycle,
         ];
-        if ($promocode)
-        {
-            $data['promocode']          = $promocode;
+
+        if ($promoCode) {
+            $data['promocode'] = $promoCode;
         }
+
         return $this->submitRequest($data);
     }
 
     /**
      * Cancels a subscription (or at least sends the request to cancel)
-     * @param int $serviceid
-     * @param string $canceltype
+     *
+     * @param int $serviceId
+     * @param string $cancelType
      * @param string $reason
      * @return array
-     * @throws Error\WHMCSConnectionException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function cancelSubscription(int $serviceid, string $canceltype, string $reason)
+    public function cancelSubscription(int $serviceId, string $cancelType, string $reason)
     {
         $data = [
-            'action'        => 'AddCancelRequest',
-            'serviceid'     => $serviceid,
-            'type'          => $canceltype,
-            'reason'        => $reason
-            ];
+            'action' => 'AddCancelRequest',
+            'serviceid' => $serviceId,
+            'type' => $cancelType,
+            'reason' => $reason
+        ];
 
         return $this->submitRequest($data);
     }
 
     /**
      * Fetches a clients domains.
+     *
      * @param int $customer_id
-     * @param int $limitstart
-     * @param int $limitnum
+     * @param int $limitStart
+     * @param int $limitNum
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function getClientsDomains(int $customer_id, int $limitstart, int $limitnum)
+    public function getClientsDomains(int $customer_id, int $limitStart, int $limitNum)
     {
         $data = [
-            'action'        => 'GetClientsDomains',
-            'limitstart'    => $limitstart,
-            'limitnum'      => $limitnum,
-            'clientid'      => $customer_id,
+            'action' => 'GetClientsDomains',
+            'limitstart' => $limitStart,
+            'limitnum' => $limitNum,
+            'clientid' => $customer_id,
         ];
 
         return $this->submitRequest($data);
@@ -587,13 +601,14 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Renews a domain of a user.
+     *
      * @param int $customer_id
      * @param string $domainname
      * @param int $years
      * @param string $paymentmethod
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function domainRenew(int $customer_id, string $domainname, int $years, string $paymentmethod)
     {
@@ -608,16 +623,17 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Gets the pricing for a certain TLD. Requires a Currency ID instead of a code because the API is weird like that.
-     * @param int $user_id
+     *
+     * @param int $currencyId
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function getTLDPricing(int $currency_id)
+    public function getTLDPricing(int $currencyId)
     {
         $data = [
-            'action'    => 'GetTLDPricing',
-            'currencyid'  => $currency_id,
+            'action'  => 'GetTLDPricing',
+            'currencyid' => $currencyId,
         ];
 
         return $this->submitRequest($data);
@@ -626,31 +642,32 @@ class WHMCS extends WhmcsCore {
     /**
      * Returns Whois information of a given domain.
      * @param string $domain
-     * @param bool $require_success = false
+     * @param bool $requireSuccess
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
-    public function getDomainWhois(string $domain, bool $require_success = false)
+    public function getDomainWhois(string $domain, bool $requireSuccess = false)
     {
         $data = [
-            'action'    => 'DomainWhois',
-            'domain'    =>  $domain,
+            'action' => 'DomainWhois',
+            'domain' => $domain,
         ];
 
-        return $this->submitRequest($data, $require_success);
+        return $this->submitRequest($data, $requireSuccess);
     }
 
     /**
      * Returns an array of currency information.
+     *
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getCurrencies()
     {
         $data = [
-            'action'    => 'GetCurrencies',
+            'action' => 'GetCurrencies',
         ];
 
         return $this->submitRequest($data);
@@ -658,14 +675,15 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Returns an array of payment method information.
+     *
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getPaymentMethods()
     {
         $data = [
-            'action'    => 'GetPaymentMethods',
+            'action' => 'GetPaymentMethods',
         ];
 
         return $this->submitRequest($data);
@@ -673,16 +691,17 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Gets the nameservers of a domain.
+     *
      * @param int $id
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getDomainNameservers(int $id)
     {
         $data = [
-            'action'    => 'DomainGetNameservers',
-            'domainid'  => $id,
+            'action' => 'DomainGetNameservers',
+            'domainid' => $id,
         ];
 
         return $this->submitRequest($data);
@@ -691,6 +710,7 @@ class WHMCS extends WhmcsCore {
     /**
      * Updates the nameservers of a domain.
      * Ns1 and ns2 are required, ns3 through 5 are updated if supplied.
+     *
      * @param int $id
      * @param string $ns1
      * @param string $ns2
@@ -698,27 +718,27 @@ class WHMCS extends WhmcsCore {
      * @param string|null $ns4
      * @param string|null $ns5
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function updateDomainNameServers(int $id, string $ns1, string $ns2, string $ns3 = null, string $ns4 = null, string $ns5 = null)
     {
         $data = [
-            'action'    => 'DomainUpdateNameservers',
-            'domainid'  => $id,
-            'ns1'       => $ns1,
-            'ns2'       => $ns2,
+            'action' => 'DomainUpdateNameservers',
+            'domainid' => $id,
+            'ns1' => $ns1,
+            'ns2' => $ns2,
         ];
-        if ($ns3)
-        {
+
+        if ($ns3) {
             $data['ns3'] = $ns3;
         }
-        if ($ns4)
-        {
+
+        if ($ns4) {
             $data['ns4'] = $ns4;
         }
-        if ($ns4)
-        {
+
+        if ($ns4) {
             $data['ns4'] = $ns5;
         }
 
@@ -729,16 +749,17 @@ class WHMCS extends WhmcsCore {
      * Requests an EPP code for a domain.
      * If you only get a result success, the EPP is probably sent to the client
      * directly.
+     *
      * @param int $id
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function requestDomainEpp(int $id)
     {
         $data = [
-            'action'    => 'DomainRequestEpp',
-            'domainid'  => $id,
+            'action' => 'DomainRequestEpp',
+            'domainid' => $id,
         ];
 
         return $this->submitRequest($data);
@@ -746,16 +767,17 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Gets Whois info (More in detail, using the int)
+     *
      * @param int $id
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getDomainWhoisInfo(int $id)
     {
         $data = [
-            'action'    => 'DomainGetWhoisInfo',
-            'domainid'  => $id
+            'action' => 'DomainGetWhoisInfo',
+            'domainid' => $id
         ];
 
         return $this->submitRequest($data);
@@ -763,18 +785,19 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Updates the domain whois info based on an xml string of a given domain.
+     *
      * @param int $id
      * @param string $xml
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function updateDomainWhoisInfo(int $id, string $xml)
     {
         $data = [
-            'action'    => 'DomainUpdateWhoisInfo',
-            'domainid'  => $id,
-            'xml'       => $xml,
+            'action' => 'DomainUpdateWhoisInfo',
+            'domainid' => $id,
+            'xml' => $xml,
         ];
 
         return $this->submitRequest($data);
@@ -785,13 +808,13 @@ class WHMCS extends WhmcsCore {
      *
      * @param string $code
      * @return array
-     * @throws Error\WHMCSConnectionException
-     * @throws Error\WHMCSResultException
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
      */
     public function getPromotions(string $code = null)
     {
         $data = [
-            'action'    => 'GetPromotions',
+            'action' => 'GetPromotions',
         ];
 
         if ($code) {
@@ -801,60 +824,106 @@ class WHMCS extends WhmcsCore {
         return $this->submitRequest($data);
     }
 
+    /**
+     * Validate the login details for a client.
+     *
+     * @param string $email
+     * @param string $password
+     * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
+     */
     public function validateLogin(string $email, string $password)
     {
         $data = [
-            'action'    => 'ValidateLogin',
-            'email'     => $email,
+            'action' => 'ValidateLogin',
+            'email' => $email,
             'password2' => $password
         ];
 
         return $this->submitRequest($data, false);
     }
 
+    /**
+     * Get cancellations.
+     *
+     * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
+     */
     public function getCancelledPackages()
     {
         $data = [
-            'action'        => 'GetCancelledPackages',
-            'limitstart'    => 0,
-            'limitnum'      => 999999999999,
+            'action' => 'GetCancelledPackages',
+            'limitstart' => 0,
+            'limitnum' => 999999999999,
         ];
 
         return $this->submitRequest($data);
     }
 
-    public function getOrders(int $custom_id, string $status = null)
+    /**
+     * Get orders.
+     *
+     * @param int $customId
+     * @param string|null $status
+     * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
+     */
+    public function getOrders(int $customId, string $status = null)
     {
         $data = [
-            'action'        => 'GetOrders',
-            'limitstart'    => 0,
-            'limitnum'      => 999999999999,
-            'userid'        => $custom_id,
+            'action' => 'GetOrders',
+            'limitstart' => 0,
+            'limitnum' => 999999999999,
+            'userid' => $customId,
         ];
-        if ($status)
-        {
+
+        if ($status) {
             $data['status'] = $status;
         }
+
         return $this->submitRequest($data);
     }
-    public function cancelOrder(int $orderid, bool $cancelsub = false, bool $noemail = true)
+
+    /**
+     * Cancel an order.
+     *
+     * @param int $orderId
+     * @param bool $cancelSub
+     * @param bool $noEmail
+     * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
+     */
+    public function cancelOrder(int $orderId, bool $cancelSub = false, bool $noEmail = true)
     {
         $data = [
-            'action'    => 'CancelOrder',
-            'orderid'   => $orderid,
-            'cancelsub' => $cancelsub,
-            'noemail'   => $noemail,
+            'action' => 'CancelOrder',
+            'orderid' => $orderId,
+            'cancelsub' => $cancelSub,
+            'noemail' => $noEmail,
         ];
 
         return $this->submitRequest($data);
     }
 
+    /**
+     * Get transactions.
+     *
+     * @param $search
+     * @param $value
+     * @return array
+     * @throws WHMCSResultException
+     * @throws WHMCSConnectionException
+     */
     public function getTransactions($search, $value)
     {
-        if (! in_array($search, ['invoiceid', 'clientid', 'transid']))
-        {
+        if (! in_array($search, ['invoiceid', 'clientid', 'transid'])) {
             throw new WHMCSResultException('Cannot find transactions by ' + $search + ". Please use invoiceid, clientid or transid.");
         }
+
         $data = [
             'action' => 'GetTransactions',
             $search => $value
@@ -864,11 +933,11 @@ class WHMCS extends WhmcsCore {
     }
 
 
-    public function getOrderById(int $orderid)
+    public function getOrderById(int $orderId)
     {
         $data = [
             'action' => 'GetOrders',
-            'id'    => $orderid
+            'id' => $orderId
         ];
 
         return $this->submitRequest($data);

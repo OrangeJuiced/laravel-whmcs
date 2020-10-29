@@ -1,7 +1,8 @@
 <?php
-namespace WHMCS\Error;
+namespace WHMCS\Exceptions;
 
 use Illuminate\Support\Facades\Log;
+
 class WHMCSConnectionException extends \Exception
 {
     public function __construct($log_message)

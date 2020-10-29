@@ -3,13 +3,13 @@
 namespace WHMCS;
 
 use GuzzleHttp\Client;
-use WHMCS\Error\WHMCSConnectionException;
-use WHMCS\Error\WHMCSResultException;
+use WHMCS\Exceptions\WHMCSConnectionException;
+use WHMCS\Exceptions\WHMCSResultException;
 
 class WhmcsCore {
 
     /**
-     * @var \GuzzleHttp\Client
+     * @var Client
      */
     protected $client;
 
@@ -22,11 +22,6 @@ class WhmcsCore {
      * @var string
      */
     protected $secret;
-
-    /**
-     * @var int
-     */
-    protected $timeout;
 
     /**
      * @var string
@@ -54,16 +49,17 @@ class WhmcsCore {
     /**
      * Respond to a WHMCS request
      *
-     * @param type
-     * @param bool $requiresuccess
+     * @param $data
+     * @param bool $requireSuccess
      * @return array
      * @throws WHMCSConnectionException
      * @throws WHMCSResultException
      */
-    public function submitRequest($data, $requiresuccess = true)
+    public function submitRequest($data, $requireSuccess = true)
     {
         try {
             $data = $this->addNecessaryParams($data);
+
             $response = $this->client->request('POST', '', [
                 'query' => $data,
                 'http_errors' => true,
@@ -71,27 +67,23 @@ class WhmcsCore {
             ]);
 
             $response = $this->handleResponse($response);
-        } catch(\Exception $e) {
-            throw new WHMCSConnectionException($e->getMessage());
+        } catch(\Exception $exception) {
+            throw new WHMCSConnectionException($exception->getMessage());
         }
 
         // If the response MUST have a success result, we will throw an exception.
-        if ($requiresuccess)
-        {
-            if ($response["result"] !== "success")
-            {
-                if ($response["result"] == "error")
-                {
+        if ($requireSuccess) {
+            if ($response["result"] !== "success") {
+                if ($response["result"] == "error") {
                     throw new WHMCSResultException("Request failed with error: " . $response["message"]);
                 }
+
                 throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["result"]);
             }
         }
 
         return $response;
-
     }
-
 
     /**
      * Adds the WHMCS secret, identifier and response to the request
@@ -101,9 +93,9 @@ class WhmcsCore {
      */
     protected function addNecessaryParams($params)
     {
-        $params['identifier']       = $this->identifier;
-        $params['secret']           = $this->secret;
-        $params['responsetype']     = $this->response_type;
+        $params['identifier'] = $this->identifier;
+        $params['secret'] = $this->secret;
+        $params['responsetype'] = $this->response_type;
 
         return $params;
     }
@@ -121,5 +113,4 @@ class WhmcsCore {
 
         return simplexml_load_string($response->getBody());
     }
-
 }
