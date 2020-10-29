@@ -109,13 +109,14 @@ class WHMCS extends WhmcsCore {
      * Return a list of a client's products
      *
      * @param null $clientId
+     * @param null $serviceId
      * @param int $start
      * @param int $limit
      * @return array
      * @throws Error\WHMCSConnectionException
      * @throws Error\WHMCSResultException
      */
-    public function getClientProducts($clientId = null, $start = 0, $limit = 25)
+    public function getClientProducts($clientId = null, $serviceId = null, $start = 0, $limit = 25)
     {
         $data = [
             'action'        =>  'GetClientsProducts',
@@ -124,6 +125,7 @@ class WHMCS extends WhmcsCore {
         ];
 
         if($clientId) $data['clientid'] = $clientId;
+        if($serviceId) $data['serviceid'] = $serviceId;
 
         return $this->submitRequest($data);
     }
