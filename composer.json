@@ -1,5 +1,5 @@
 {
-    "name": "nicklaw5/laravel-whmcs",
+    "name": "orangejuiced/laravel-whmcs",
     "description": "A simple Laravel interface for interacting with the WHMCS API.",
     "keywords": ["laravel", "whmcs", "api"],
     "license": "MIT",

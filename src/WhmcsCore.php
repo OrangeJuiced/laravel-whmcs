@@ -3,6 +3,7 @@
 namespace WHMCS;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use WHMCS\Exceptions\WHMCSConnectionException;
 use WHMCS\Exceptions\WHMCSResultException;
 
@@ -35,14 +36,14 @@ class WhmcsCore {
      */
     public function __construct()
     {
-        $this->identifier     = config('whmcs.identifier');
-        $this->secret         = config('whmcs.secret');
-        $this->response_type  = strtolower(config('whmcs.response_type'));
+        $this->identifier = config('whmcs.identifier');
+        $this->secret = config('whmcs.secret');
+        $this->response_type = strtolower(config('whmcs.response_type'));
 
         $this->client = new Client([
-            'base_uri'  => config('whmcs.url'),
-            'timeout'   => config('whmcs.request_timeout'),
-            'headers'   => ['Accept' => 'application/json']
+            'base_uri' => config('whmcs.url'),
+            'timeout' => config('whmcs.request_timeout'),
+            'headers' => ['Accept' => 'application/json']
         ]);
     }
 
@@ -54,6 +55,7 @@ class WhmcsCore {
      * @return array
      * @throws WHMCSConnectionException
      * @throws WHMCSResultException
+     * @throws GuzzleException
      */
     public function submitRequest($data, $requireSuccess = true)
     {
