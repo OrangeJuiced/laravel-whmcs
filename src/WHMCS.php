@@ -2,6 +2,7 @@
 
 namespace WHMCS;
 
+use GuzzleHttp\Exception\GuzzleException;
 use WHMCS\Exceptions\WHMCSConnectionException;
 use WHMCS\Exceptions\WHMCSResultException;
 
@@ -25,8 +26,9 @@ class WHMCS extends WhmcsCore {
      * @param string|null $sorting
      * @param string|null $search
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getClients($start = null, $limit = null, $sorting = null, $search = null)
     {
@@ -49,8 +51,9 @@ class WHMCS extends WhmcsCore {
      * @param null $email
      * @param bool $stats
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getClientsDetails($clientId = null, $email = null, $stats = null)
     {
@@ -72,8 +75,9 @@ class WHMCS extends WhmcsCore {
      * @param $client_id
      * @param $value_updates
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function UpdateClient($client_id, $value_updates)
     {
@@ -94,8 +98,9 @@ class WHMCS extends WhmcsCore {
      * @param int $start
      * @param int $limit
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getClientDomains($client_id, $start = 0, $limit = 25)
     {
@@ -117,8 +122,9 @@ class WHMCS extends WhmcsCore {
      * @param int $start
      * @param int $limit
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getClientProducts($clientId = null, $serviceId = null, $start = 0, $limit = 25)
     {
@@ -138,8 +144,9 @@ class WHMCS extends WhmcsCore {
      * Returns a list of product types
      *
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getAllProducts()
     {
@@ -155,8 +162,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param array $data
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function createClient($data)
     {
@@ -179,8 +187,9 @@ class WHMCS extends WhmcsCore {
      * @param int $department_id
      * @param string $ignoredept
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getTickets($client_id = null, $start = 0, $limit = 50, $subject = null, $status = null, $department_id = null, $ignoredept = 'false')
     {
@@ -223,8 +232,9 @@ class WHMCS extends WhmcsCore {
      * @param boolean $is_domain
      *
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function openTicket($client_id, $department_id, $subject, $priority, $message, $markdown = true, $product_id = null, $is_domain = null)
     {
@@ -258,8 +268,9 @@ class WHMCS extends WhmcsCore {
      * @param string $message
      * @param boolean $markdown
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function addTicketReply($client_id, $ticket_id, $message, $markdown = true)
     {
@@ -280,8 +291,9 @@ class WHMCS extends WhmcsCore {
      * @param $num
      * @param string $sort
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getTicketByNum($num, $sort)
     {
@@ -301,8 +313,9 @@ class WHMCS extends WhmcsCore {
      * @param $id
      * @param string $sort
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getTicketById($id, $sort)
     {
@@ -320,8 +333,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param bool $ignore_dept_assignments
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getSupportDepartments($ignore_dept_assignments = true)
     {
@@ -339,8 +353,9 @@ class WHMCS extends WhmcsCore {
      * @param $ticket_id
      * @param $dataToUpdate
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function updateTicket($ticket_id, $dataToUpdate)
     {
@@ -362,8 +377,9 @@ class WHMCS extends WhmcsCore {
      * @param $limitnum
      * @param $status
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getInvoices($client_id = null, $limitstart = null, $limitnum = null, $status = null)
     {
@@ -395,8 +411,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param int $invoiceId
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getInvoice(int $invoiceId)
     {
@@ -418,8 +435,9 @@ class WHMCS extends WhmcsCore {
      * @param string $description
      * @param float $amount
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function addTransaction(string $paymentMethod, int $custom_id, int $invoice_id, string $transaction_id, string $description, float $amount)
     {
@@ -449,8 +467,9 @@ class WHMCS extends WhmcsCore {
      * @param array $domain_epps
      * @param string $promoCode
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function addOrder(string $paymentMethod, int $custom_id, array $product_ids, array $product_cycles, array $domain_names, array $domain_durations, array $domain_types, array $domain_epps, string $promoCode = null)
     {
@@ -486,8 +505,9 @@ class WHMCS extends WhmcsCore {
      * @param string $paymentMethod
      * @param string $promoCode
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function upgradeProduct(int $oldId, int $newId, string $newCycle, string $paymentMethod, string $promoCode = null)
     {
@@ -526,8 +546,9 @@ class WHMCS extends WhmcsCore {
      * @param string $paymentMethod
      * @param string|null $promoCode
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function calculateProductUpgrade(int $oldId, int $newId, string $newCycle, string $paymentMethod, string $promoCode = null)
     {
@@ -562,8 +583,9 @@ class WHMCS extends WhmcsCore {
      * @param string $cancelType
      * @param string $reason
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function cancelSubscription(int $serviceId, string $cancelType, string $reason)
     {
@@ -584,8 +606,9 @@ class WHMCS extends WhmcsCore {
      * @param int $limitStart
      * @param int $limitNum
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getClientsDomains(int $customer_id, int $limitStart, int $limitNum)
     {
@@ -607,8 +630,9 @@ class WHMCS extends WhmcsCore {
      * @param int $years
      * @param string $paymentmethod
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function domainRenew(int $customer_id, string $domainname, int $years, string $paymentmethod)
     {
@@ -626,8 +650,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param int $currencyId
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getTLDPricing(int $currencyId)
     {
@@ -641,11 +666,13 @@ class WHMCS extends WhmcsCore {
 
     /**
      * Returns Whois information of a given domain.
+     *
      * @param string $domain
      * @param bool $requireSuccess
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getDomainWhois(string $domain, bool $requireSuccess = false)
     {
@@ -661,8 +688,9 @@ class WHMCS extends WhmcsCore {
      * Returns an array of currency information.
      *
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getCurrencies()
     {
@@ -677,8 +705,9 @@ class WHMCS extends WhmcsCore {
      * Returns an array of payment method information.
      *
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getPaymentMethods()
     {
@@ -694,8 +723,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param int $id
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getDomainNameservers(int $id)
     {
@@ -718,8 +748,9 @@ class WHMCS extends WhmcsCore {
      * @param string|null $ns4
      * @param string|null $ns5
      * @return array
-     * @throws WHMCSResultException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
+     * @throws GuzzleException
      */
     public function updateDomainNameServers(int $id, string $ns1, string $ns2, string $ns3 = null, string $ns4 = null, string $ns5 = null)
     {
@@ -730,17 +761,9 @@ class WHMCS extends WhmcsCore {
             'ns2' => $ns2,
         ];
 
-        if ($ns3) {
-            $data['ns3'] = $ns3;
-        }
-
-        if ($ns4) {
-            $data['ns4'] = $ns4;
-        }
-
-        if ($ns4) {
-            $data['ns4'] = $ns5;
-        }
+        if ($ns3) $data['ns3'] = $ns3;
+        if ($ns4) $data['ns4'] = $ns4;
+        if ($ns5) $data['ns5'] = $ns5;
 
         return $this->submitRequest($data);
     }
@@ -752,8 +775,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param int $id
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function requestDomainEpp(int $id)
     {
@@ -770,8 +794,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param int $id
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getDomainWhoisInfo(int $id)
     {
@@ -789,8 +814,9 @@ class WHMCS extends WhmcsCore {
      * @param int $id
      * @param string $xml
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function updateDomainWhoisInfo(int $id, string $xml)
     {
@@ -808,8 +834,9 @@ class WHMCS extends WhmcsCore {
      *
      * @param string $code
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getPromotions(string $code = null)
     {
@@ -830,8 +857,9 @@ class WHMCS extends WhmcsCore {
      * @param string $email
      * @param string $password
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function validateLogin(string $email, string $password)
     {
@@ -848,8 +876,9 @@ class WHMCS extends WhmcsCore {
      * Get cancellations.
      *
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getCancelledPackages()
     {
@@ -868,8 +897,9 @@ class WHMCS extends WhmcsCore {
      * @param int $customId
      * @param string|null $status
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getOrders(int $customId, string $status = null)
     {
@@ -894,8 +924,9 @@ class WHMCS extends WhmcsCore {
      * @param bool $cancelSub
      * @param bool $noEmail
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function cancelOrder(int $orderId, bool $cancelSub = false, bool $noEmail = true)
     {
@@ -915,8 +946,9 @@ class WHMCS extends WhmcsCore {
      * @param $search
      * @param $value
      * @return array
-     * @throws WHMCSResultException
+     * @throws GuzzleException
      * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
      */
     public function getTransactions($search, $value)
     {
@@ -932,7 +964,16 @@ class WHMCS extends WhmcsCore {
         return $this->submitRequest($data);
     }
 
-
+    /**
+     *
+     * Get an order by Id.
+     *
+     * @param int $orderId
+     * @return array
+     * @throws GuzzleException
+     * @throws WHMCSConnectionException
+     * @throws WHMCSResultException
+     */
     public function getOrderById(int $orderId)
     {
         $data = [
