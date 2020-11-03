@@ -83,7 +83,7 @@ class WhmcsCore {
                 throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["result"]);
             }
 
-            if($response['status'] === 'error') {
+            if(isset($response['status']) && $response['status'] === 'error') {
                 throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["message"]);
             }
         }
