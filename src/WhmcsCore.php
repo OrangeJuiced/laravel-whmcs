@@ -75,12 +75,16 @@ class WhmcsCore {
 
         // If the response MUST have a success result, we will throw an exception.
         if ($requireSuccess) {
-            if ($response["result"] !== "success") {
-                if ($response["result"] == "error") {
+            if ((isset($response['result']) && $response['result'] !== 'success')) {
+                if ($response['result'] == "error") {
                     throw new WHMCSResultException("Request failed with error: " . $response["message"]);
                 }
 
                 throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["result"]);
+            }
+
+            if($response['status'] === 'error') {
+                throw new WHMCSResultException("Request failed, no error message found. Result was " . $response["message"]);
             }
         }
 
