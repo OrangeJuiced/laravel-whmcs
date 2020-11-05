@@ -94,7 +94,8 @@ class WHMCS extends WhmcsCore {
     /**
      * Returns the specified client's domains
      *
-     * @param $client_id
+     * @param null $clientId
+     * @param null $domainId
      * @param int $start
      * @param int $limit
      * @return array
@@ -102,14 +103,16 @@ class WHMCS extends WhmcsCore {
      * @throws WHMCSConnectionException
      * @throws WHMCSResultException
      */
-    public function getClientDomains($client_id, $start = 0, $limit = 25)
+    public function getClientDomains($clientId = null, $domainId = null, $start = 0, $limit = 25)
     {
         $data = [
             'action'        =>  'GetClientsDomains',
-            'clientid'      =>  $client_id,
             'limitstart'    =>  $start,
             'limitnum'      =>  $limit
         ];
+
+        if($clientId) $data['clientid'] = $clientId;
+        if($domainId) $data['domainid'] = $domainId;
 
         return $this->submitRequest($data);
     }
